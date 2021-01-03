@@ -1,0 +1,19 @@
+{
+  "name": "@nachijr4/dns01-challenge-route53",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nachijr4/dns01-challenge-route53.git"
+  },
+  "author": "Nachimuthu N",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nachijr4/dns01-challenge-route53/issues"
+  },
+  "homepage": "https://github.com/nachijr4/dns01-challenge-route53#readme"
+}
