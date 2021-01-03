@@ -1,7 +1,6 @@
 {
-  "name": "@nachijr4/dns01-challenge-route53",
+  "name": "acme-dns01",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,5 +14,9 @@
   "bugs": {
     "url": "https://github.com/nachijr4/dns01-challenge-route53/issues"
   },
-  "homepage": "https://github.com/nachijr4/dns01-challenge-route53#readme"
+  "homepage": "https://github.com/nachijr4/dns01-challenge-route53#readme",
+  "description": "",
+  "dependencies": {
+    "aws-sdk": "^2.820.0"
+  }
 }
