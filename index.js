@@ -5,7 +5,7 @@ var defaults = {};
 
 const getZones = async (route53, zoneName) => {
 	try {
-	  let data = await route53.listHostedZonesByName({DNSName: zoneName, MaxItems: 5}).promise();
+	  let data = await route53.listHostedZonesByName({DNSName: zoneName, MaxItems: "15"}).promise();
 	  let zoneData = data.HostedZones.map(zone => {
 		// drop '.' at the end of each zone
 		zone.Name = zone.Name.substr(0, zone.Name.length - 1);
