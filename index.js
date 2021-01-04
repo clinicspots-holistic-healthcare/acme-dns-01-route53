@@ -22,6 +22,20 @@ const getZones = async (route53, zoneName) => {
 	}
   };
 
+  const getChange = async (client, changeId) => {
+	try {
+	  let change = await client.getChange({ Id: changeId }).promise();
+	  return change;
+	} catch (e) {
+	  console.log(`Error polling for change: ${changeId}:`, e);
+	  throw e;
+	}
+  };
+  
+  const sleep = (ms) => {
+	return new Promise(resolve => setTimeout(resolve, ms));
+  };
+
 module.exports.create = function(config) {
 	const route53 = new AWS.Route53({
 		accessKeyId: config.AWS_ACCESS_KEY_ID,
