@@ -154,7 +154,6 @@ module.exports.create = function(config) {
 			}
 		},
 		remove: async function(data) {
-			config.debug = true
 			 const ch = data.challenge;
 			const txt = ch.dnsAuthorization;
 			const recordName = `${ch.dnsHost}`;
