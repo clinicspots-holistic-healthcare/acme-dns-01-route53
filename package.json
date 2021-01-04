@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/clinicspots-holistic-healthcare/acme-dns-01-route53#readme",
   "dependencies": {
-    "aws-sdk": "^2.820.0"
+    "aws-sdk": "^2.820.0",
+    "dotenv": "^8.2.0"
   }
 }

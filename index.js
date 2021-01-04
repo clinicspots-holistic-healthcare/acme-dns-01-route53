@@ -1,7 +1,8 @@
 'use strict';
+const dotenv = require('dotenv');
 var AWS = require('aws-sdk')
-var request;
-var defaults = {};
+dotenv.config();
+
 
 const getZones = async (route53, zoneName) => {
 	try {
@@ -37,10 +38,7 @@ const getZones = async (route53, zoneName) => {
   };
 
 module.exports.create = function(config) {
-	const route53 = new AWS.Route53({
-		accessKeyId: config.AWS_ACCESS_KEY_ID,
-		secretAccessKey: config.AWS_SECRET_ACCESS_KEY
-	  });
+	const route53 = new AWS.Route53({apiVersion: "2013-04-01"});
 
 	return {
 		init: function(opts) {
