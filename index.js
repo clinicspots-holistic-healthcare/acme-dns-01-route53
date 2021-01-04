@@ -3,9 +3,9 @@ var AWS = require('aws-sdk')
 var request;
 var defaults = {};
 
-const getZones = async (route53) => {
+const getZones = async (route53, zoneName) => {
 	try {
-	  let data = await route53.listHostedZonesByName().promise();
+	  let data = await route53.listHostedZonesByName({DNSName: zoneName}).promise();
 	  let zoneData = data.HostedZones.map(zone => {
 		// drop '.' at the end of each zone
 		zone.Name = zone.Name.substr(0, zone.Name.length - 1);
@@ -52,7 +52,7 @@ module.exports.create = function(config) {
 			}
 
 			try {
-			let zoneData = await getZones(route53);
+			let zoneData = await getZones(route53, ch.hostname);
 			let zone = zoneData.filter(zone => zone.Name === ch.hostname)[0];
 			if (!zone) {
 				console.error("Zone could not be found");
@@ -163,7 +163,7 @@ module.exports.create = function(config) {
 			}
 	
 			try {
-			let zoneData = await getZones(route53);
+			let zoneData = await getZones(route53, ch.hostname);
 			let zone = zoneData.filter(zone => zone.Name === ch.hostname)[0];
 	
 			if (!zone) {
