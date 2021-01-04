@@ -1,0 +1,29 @@
+{
+  "name": "acme-dns-01-route53",
+  "version": "1.0.0",
+  "description": "Package to be use to pass acme dns challenge for domains controlled by route53",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/clinicspots-holistic-healthcare/acme-dns-01-route53.git"
+  },
+  "keywords": [
+    "ACME",
+    "Greenlock",
+    "dns-01",
+    "AWS",
+    "route53"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/clinicspots-holistic-healthcare/acme-dns-01-route53/issues"
+  },
+  "homepage": "https://github.com/clinicspots-holistic-healthcare/acme-dns-01-route53#readme",
+  "dependencies": {
+    "aws-sdk": "^2.820.0"
+  }
+}
