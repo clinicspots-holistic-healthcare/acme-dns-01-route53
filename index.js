@@ -2,6 +2,7 @@
 const dotenv = require('dotenv');
 var AWS = require('aws-sdk')
 dotenv.config();
+var request;
 
 
 const getZones = async (route53, zoneName) => {
