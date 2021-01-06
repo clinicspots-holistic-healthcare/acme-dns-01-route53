@@ -42,7 +42,7 @@ module.exports.create = function(config) {
 	const route53 = new AWS.Route53({apiVersion: "2013-04-01"});
 
 	return {
-		init: function(opts) {
+		init: async function(opts) {
 			request = opts.request;
 			return null;
 		},
@@ -240,7 +240,6 @@ module.exports.create = function(config) {
 				console.log("Deleting whole record:", recordName);
 				console.log("\t value:", match.ResourceRecords.map(rr => rr.Value));
 				}
-				console.log("The error area ", match , txt)
 				await route53
 				.changeResourceRecordSets({
 					HostedZoneId: zone.Id,
