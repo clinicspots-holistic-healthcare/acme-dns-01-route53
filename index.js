@@ -198,8 +198,6 @@ module.exports.create = function(config) {
 				).length // remove quotes around record and match it against value we want to remove
 			)[0]; // should only contain one match at most (index 0 doesn't throw here if it doesn't exist)
 			
-			console.log("Matched RecordSets for removal ", match)
-
 			// if more than one recordset, remove the one we don't want and keep the rest
 			if (match && match.ResourceRecords.length > 1) {
 				if (config.debug) {
@@ -235,7 +233,7 @@ module.exports.create = function(config) {
 					}
 				})
 				.promise();
-			} else {
+			} else if(match){
 				// only one record value exists, so delete it
 	
 				if (config.debug) {
@@ -265,9 +263,9 @@ module.exports.create = function(config) {
 	
 			return true;
 			} catch (e) {
-			console.log("Encountered an error deleting the record:", e);
-			return null;
-			}
+				console.log("Encountered an error deleting the record:", e);
+				return null;
+			} 
 		},
 		get: async (data) => {
 			let ch = data.challenge;
