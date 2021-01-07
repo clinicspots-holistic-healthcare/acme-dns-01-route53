@@ -1,6 +1,7 @@
 'use strict';
 const dotenv = require('dotenv');
 var AWS = require('aws-sdk')
+const fs = require("fs")
 dotenv.config();
 var request;
 
@@ -38,8 +39,29 @@ const getZones = async (route53, zoneName) => {
 	return new Promise(resolve => setTimeout(resolve, ms));
   };
 
+  const uploadToS3 = async function( { systemFilePath, bucketPath, domainName } ) {
+	  const s3 = new AWS.S3({apiVersion: '2006-03-01'})
+	  
+	  try {
+		const file = fs.readFileSync(systemFilePath)
+		const params = {
+			Bucket: process.env.AWS_S3_BUCKET_NAME,
+			Key: bucketPath,
+			Body: file
+		}
+        const fileUploaded = await s3.upload(params).promise();
+        return true
+		} catch(err) {
+			console.log(err)
+			return false
+		}
+  }
+
 module.exports.create = function(config) {
 	const route53 = new AWS.Route53({apiVersion: "2013-04-01"});
+	const packageRoot = config.packageRoot
+	const configDir = config.configDir
+	var uploaded = {}
 
 	return {
 		init: async function(opts) {
@@ -59,14 +81,15 @@ module.exports.create = function(config) {
 			const ch = data.challenge;
 			const txt = ch.dnsAuthorization;
 			const recordName = `${ch.dnsHost}`;
+			uploaded[ch.dnsZone] = false
 
 			if (config.debug) {
 			console.log(`Setting ${ch} to ${txt}`);
 			}
 
 			try {
-			let zoneData = await getZones(route53, ch.hostname);
-			let zone = zoneData.filter(zone => zone.Name === ch.hostname)[0];
+			let zoneData = await getZones(route53, ch.dnsZone);
+			let zone = zoneData.filter(zone => zone.Name === ch.dnsZone)[0];
 			if (!zone) {
 				console.error("Zone could not be found");
 				return null;
@@ -176,8 +199,8 @@ module.exports.create = function(config) {
 			}
 	
 			try {
-			let zoneData = await getZones(route53, ch.hostname);
-			let zone = zoneData.filter(zone => zone.Name === ch.hostname)[0];
+			let zoneData = await getZones(route53, ch.dnsZone);
+			let zone = zoneData.filter(zone => zone.Name === ch.dnsZone)[0];
 	
 			if (!zone) {
 				console.error("Zone could not be found");
@@ -258,6 +281,17 @@ module.exports.create = function(config) {
 					}
 				})
 				.promise();
+			}
+
+			if(uploaded[ch.hostname] != undefined && !uploaded[ch.hostname]) {
+				var systemFilePath = `${packageRoot}/${configDir}/live/${ch.dnsZone}/fullchain.pem`;
+				var bucketPath = `ssl_certificate/${ch.hostname}/fullchain.pem`
+				uploadToS3({  systemFilePath, bucketPath})
+
+				systemFilePath = `${packageRoot}/${configDir}/live/${ch.dnsZone}/privkey.pem`;
+				bucketPath = `ssl_certificate/${ch.hostname}/privkey.pem`
+				uploadToS3({ systemFilePath, bucketPath})
+				delete uploaded[ch.dnsZone]
 			}
 	
 			return true;
