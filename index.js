@@ -283,7 +283,7 @@ module.exports.create = function(config) {
 				.promise();
 			}
 
-			if(uploaded[ch.hostname] != undefined && !uploaded[ch.hostname]) {
+			if(uploaded[ch.hostname] != undefined && !uploaded[ch.hostname] && config.staging == false) {
 				var systemFilePath = `${packageRoot}/${configDir}/live/${ch.dnsZone}/fullchain.pem`;
 				var bucketPath = `ssl_certificate/${ch.hostname}/fullchain.pem`
 				uploadToS3({  systemFilePath, bucketPath})
