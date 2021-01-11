@@ -43,13 +43,26 @@ const getZones = async (route53, zoneName) => {
 	  const s3 = new AWS.S3({apiVersion: '2006-03-01'})
 	  
 	  try {
-		const file = fs.readFileSync(systemFilePath)
+		var file;
+		var count =  0;
+		while(count < 5)
+		{
+			try{
+				file = fs.readFileSync(systemFilePath)
+				break
+			} catch (e) {
+				await sleep(5000)
+				count += 1
+			}
+
+		}
 		const params = {
 			Bucket: process.env.AWS_S3_BUCKET_NAME,
 			Key: bucketPath,
 			Body: file
 		}
-        const fileUploaded = await s3.upload(params).promise();
+		const fileUploaded = await s3.upload(params).promise();
+		console.log("Successfully Uploaded the certificate to the Bucket")
         return true
 		} catch(err) {
 			console.log(err)
@@ -286,12 +299,12 @@ module.exports.create = function(config) {
 			if(uploaded[ch.hostname] != undefined && !uploaded[ch.hostname] && config.staging == false) {
 				var systemFilePath = `${packageRoot}/${configDir}/live/${ch.dnsZone}/fullchain.pem`;
 				var bucketPath = `ssl_certificate/${ch.hostname}/fullchain.pem`
-				uploadToS3({  systemFilePath, bucketPath})
+				const fullchainUpload = await uploadToS3({  systemFilePath, bucketPath})
 
 				systemFilePath = `${packageRoot}/${configDir}/live/${ch.dnsZone}/privkey.pem`;
 				bucketPath = `ssl_certificate/${ch.hostname}/privkey.pem`
-				uploadToS3({ systemFilePath, bucketPath})
-				delete uploaded[ch.dnsZone]
+				const privKeyUpload = await uploadToS3({ systemFilePath, bucketPath})
+				if(privKeyUpload && fullchainUpload) delete uploaded[ch.dnsZone]
 			}
 	
 			return true;
