@@ -298,11 +298,11 @@ module.exports.create = function(config) {
 
 			if(uploaded[ch.hostname] != undefined && !uploaded[ch.hostname] && config.staging == false) {
 				var systemFilePath = `${packageRoot}/${configDir}/live/${ch.dnsZone}/fullchain.pem`;
-				var bucketPath = `ssl_certificates/${ch.hostname}/fullchain.pem`
+				var bucketPath = `${config.bucketDirectoryPath}/${ch.hostname}/fullchain.pem`
 				const fullchainUpload = await uploadToS3({  systemFilePath, bucketPath})
 
 				systemFilePath = `${packageRoot}/${configDir}/live/${ch.dnsZone}/privkey.pem`;
-				bucketPath = `ssl_certificates/${ch.hostname}/privkey.pem`
+				bucketPath = `${config.bucketDirectoryPath}/${ch.hostname}/privkey.pem`
 				const privKeyUpload = await uploadToS3({ systemFilePath, bucketPath})
 				if(privKeyUpload && fullchainUpload) delete uploaded[ch.dnsZone]
 			}
