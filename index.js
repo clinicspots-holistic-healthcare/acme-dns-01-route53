@@ -15,10 +15,6 @@ const getZones = async (route53, zoneName) => {
 		return zone;
 	  });
   
-	  if (data.IsTruncated) {
-		throw "Too many records to deal with. Some are truncated. ";
-	  }
-  
 	  return zoneData;
 	} catch (e) {
 	  throw e;
