@@ -60,14 +60,15 @@ module.exports.create = function(config) {
 			const txt = ch.dnsAuthorization;
 			const recordName = `${ch.dnsHost}`;
 			uploaded[ch.dnsZone] = false
+			const hostedZoneName = (ch.dnsZone)? ch.dnsZone: ch.hostname
 
 			if (config.debug) {
 			console.log(`Setting ${ch} to ${txt}`);
 			}
 
 			try {
-			let zoneData = await getZones(route53, ch.dnsZone);
-			let zone = zoneData.filter(zone => zone.Name === ch.dnsZone)[0];
+			let zoneData = await getZones(route53, hostedZoneName);
+			let zone = zoneData.filter(zone => zone.Name === hostedZoneName)[0];
 			if (!zone) {
 				console.error("Zone could not be found");
 				return null;
@@ -171,14 +172,15 @@ module.exports.create = function(config) {
 			 const ch = data.challenge;
 			const txt = ch.dnsAuthorization;
 			const recordName = `${ch.dnsHost}`;
+			const hostedZoneName = (ch.dnsZone)? ch.dnsZone: ch.hostname
 			await sleep(10000);
 			if (config.debug) {
 			console.log(`Removing ${recordName} value ${txt}`);
 			}
 	
 			try {
-			let zoneData = await getZones(route53, ch.dnsZone);
-			let zone = zoneData.filter(zone => zone.Name === ch.dnsZone)[0];
+			let zoneData = await getZones(route53, hostedZoneName);
+			let zone = zoneData.filter(zone => zone.Name === hostedZoneName)[0];
 	
 			if (!zone) {
 				console.error("Zone could not be found");
