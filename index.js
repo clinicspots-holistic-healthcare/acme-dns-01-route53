@@ -171,7 +171,7 @@ module.exports.create = function(config) {
 			 const ch = data.challenge;
 			const txt = ch.dnsAuthorization;
 			const recordName = `${ch.dnsHost}`;
-	
+			await sleep(10000);
 			if (config.debug) {
 			console.log(`Removing ${recordName} value ${txt}`);
 			}
